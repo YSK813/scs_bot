@@ -8,6 +8,8 @@ Discord : YSK#7011
 Twitter : [@YSK__0813](https://twitter.com/YSK__0813)  
 Support : [Discord Server](https://discord.gg/scHkEmcrwR)  
 
+#### If you find a bug, please report it to the support server.
+
 
 
 # Discord.js Version used  
@@ -41,14 +43,25 @@ Please replace `xxx` your bot token.
     "prefix": ".",
     "color": {
         "ok": "#00ff95",
-        "no": "#ff0000"
+        "no": "#ff0000",
+        "joinuser": "#32ff32",
+        "leftuser": "#ff3232"
+    },
+    "ch_id": {
+        "joinlog": "938387409807224864",
+        "leftlog": "938387409807224864"
     }
 }
 ```  
 - "prefix" : This is Set Bot command prefix.
 - "color" : Embed color in your Bot.
-  - "ok" : If Process success
-  - "no" : If Process Error
+  - "ok" : If process success.
+  - "no" : If process error.
+  - "joinuser" : Embed message color when user server joins.
+  - "leftuser" : Embed message color when user server leaves.
+- "ch_id" : This is any log channel ID.
+  - "joinlog" : Member join guild log channel id.
+  - "leftlog" : Member join left log channel id.
 
 
 
@@ -67,3 +80,58 @@ module.exports = {
     }
 }
 ```
+
+
+
+# Code description when a user joins and leaves the server
+```js
+// Joined
+client.on(`guildMemberAdd`, member => {
+    member.guild.channels.cache.forEach(ch => {
+        if(ch.id === settings.ch_id.joinlog) {
+            const join_msg = new MessageEmbed()
+                .setTitle(`Join the Server`) // Embed Title
+                .setDescription(`User : ${member.user.tag} (**${member.user.id}**)`) // Embed Description
+                .setColor(settings.color.joinuser) // Embed Color
+
+            ch.send(join_msg) // Embed message send channel.
+        } else {
+            return; // Ignore if channel not found on server
+        }
+    })
+})
+
+
+// Leaves
+client.on(`guildMemberRemove`, member => {
+    member.guild.channels.cache.forEach(ch => {
+        if(ch.id === settings.ch_id.leftlog) {
+            const left_msg = new MessageEmbed()
+                .setTitle(`Left the server`) // Embed Title
+                .setDescription(`User : ${member.user.tag} (**${member.user.id}**)`) // Embed Description
+                .setColor(settings.color.leftuser) // Embed Color
+
+            ch.send(left_msg) // Embed message send channel.
+        } else {
+            return; // Ignore if channel not found on server
+        }
+    })
+})
+```
+
+
+
+# Options for sending messages when members join and leave [Discord.js normal functions]
+```
+[User Mention]
+- `<${member.user.id}>`
+
+
+[User Tag]
+- `${member.user.tag}`
+
+
+[User ID]
+- `${member.user.id}`
+```
+#### Please use the contents of the single quotation.

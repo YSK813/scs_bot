@@ -24,7 +24,6 @@ const Prefix = settings.prefix;
 
 
 // Load Handler folder
-
 fs.readdir(`./commands`, (err, files) => {
     if(err) return console.log(`コマンドが発見できませんでした。`);
 
@@ -42,6 +41,7 @@ fs.readdir(`./commands`, (err, files) => {
 })
 
 
+
 // Client Events : message
 client.on(`message`, message => {
     if(message.author.bot || !message.guild) return;
@@ -54,19 +54,19 @@ client.on(`message`, message => {
 
     if(!cmd) return;
 
-    //  [管理者権限] : 権限不足時のエラー
+    //  [Administrator] : Error when insufficient authority
     const need_ADMINISTRATOR = new MessageEmbed()
         .setTitle(`権限不足`)
         .setDescription(`\`${command}\` を実行するための権限が不足しています。\n必要な権限は以下の通りです。\n\n> 管理者権限`)
         .setColor(settings.color.no)
 
-    //  [メンバーをBAN] : 権限不足時のエラー
+    //  [Ban Members] : Error when insufficient authority
     const need_BAN_MEMBERS = new MessageEmbed()
         .setTitle(`権限不足`)
         .setDescription(`\`${command}\` を実行するための権限が不足しています。\n必要な権限は以下の通りです。\n\n> メンバーをBAN`)
         .setColor(settings.color.no)
 
-    //  [メンバーをキック] : 権限不足時のエラー
+    //  [Kick Members] : Error when insufficient authority
     const need_KICK_MEMBERS = new MessageEmbed()
         .setTitle(`権限不足`)
         .setDescription(`\`${command}\` を実行するための権限が不足しています。\n必要な権限は以下の通りです。\n\n> メンバーをキック`)
@@ -82,9 +82,36 @@ client.on(`message`, message => {
 
 
 
-/*
-const commandlimit = new MessageEmbed()
-        .setTitle(`権限不足`)
-        .setDescription(`コマンドを実行するための権限が不足しています。\n権限をお確かめの上再度お試しください。`)
-        .setColor(settings.color.no)
-*/
+
+// Client Events : guildMemberAdd
+client.on(`guildMemberAdd`, member => {
+    member.guild.channels.cache.forEach(ch => {
+        if(ch.id === settings.ch_id.joinlog) {
+            const join_msg = new MessageEmbed()
+                .setTitle(`Join the Server`)
+                .setDescription(`User : ${member.user.tag} (**${member.user.id}**)`)
+                .setColor(settings.color.joinuser)
+
+            ch.send(join_msg)
+        } else {
+            return;
+        }
+    })
+})
+
+
+// Client Events : guildMemberRemove
+client.on(`guildMemberRemove`, member => {
+    member.guild.channels.cache.forEach(ch => {
+        if(ch.id === settings.ch_id.leftlog) {
+            const left_msg = new MessageEmbed()
+                .setTitle(`Left the server`)
+                .setDescription(`User : ${member.user.tag} (**${member.user.id}**)`)
+                .setColor(settings.color.leftuser)
+
+            ch.send(left_msg)
+        } else {
+            return;
+        }
+    })
+})
