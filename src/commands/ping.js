@@ -7,6 +7,11 @@ module.exports = {
     aliases: [],
     
     async execute(client, message, args) {
-        message.channel.send(`\`\`\`\nWebsocket Ping : ${client.ws.ping}\n\`\`\``)
+        const ping = new MessageEmbed()
+            .setTitle(`Pong!`)
+            .setDescription(`\`Websocket Ping : ${client.ws.ping}\``)
+            .setColor(settings.color.ok)
+
+        message.reply({embeds: [ping]})
     }
 }

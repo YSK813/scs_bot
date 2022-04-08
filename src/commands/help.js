@@ -12,6 +12,6 @@ module.exports = {
             .setDescription(client.commands.map(cmd => `\`${cmd.name}\``).join(', '))
             .setColor(settings.color.ok)
 
-        message.channel.send(helpembed)
+        message.reply({embeds: [helpembed]})
     }
 }

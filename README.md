@@ -13,7 +13,7 @@ Support : [Discord Server](https://discord.gg/scHkEmcrwR)
 
 
 # Discord.js Version used  
-[Discord.js : 12.5.3  ](https://github.com/discordjs/discord.js/releases/tag/12.5.3)
+[Discord.js : 13.6.0  ](https://github.com/discordjs/discord.js/releases/tag/13.6.0)
 
 
 
@@ -40,7 +40,7 @@ Please replace `xxx` your bot token.
 # `src/commands/settings.json` description.
 ```json
 {
-    "prefix": ".",
+    "prefix": "sc!",
     "color": {
         "ok": "#00ff95",
         "no": "#ff0000",
@@ -48,8 +48,8 @@ Please replace `xxx` your bot token.
         "leftuser": "#ff3232"
     },
     "ch_id": {
-        "joinlog": "938387409807224864",
-        "leftlog": "938387409807224864"
+        "joinlog": "961894577533497374",
+        "leftlog": "961894577533497374"
     }
 }
 ```  
@@ -133,5 +133,9 @@ client.on(`guildMemberRemove`, member => {
 
 [User ID]
 - `${member.user.id}`
+
+
+[User Icon]
+- `${member.user.avatarURL()}`
 ```
 #### Please use the contents of the single quotation.

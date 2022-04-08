@@ -1,6 +1,6 @@
 const discord = require(`discord.js`);
-const { Client, Collection, MessageEmbed } = require(`discord.js`);
-const client = new Client();
+const { Collection, MessageEmbed } = require(`discord.js`);
+const client = new discord.Client({ intents: 32767, allowedMentions: {repliedUser: false} });
 const fs = require(`fs`);
 const { config } = require(`dotenv`);
 const path = require(`path`);
@@ -14,6 +14,10 @@ client.login(tokenfile.token);
 // Clinet Events : ready
 client.on(`ready`, () => {
     console.log(`\nStart Bot : logined ${client.user.tag}\n\n${new Date()}`)
+
+    setInterval(() => {
+        client.user.setActivity(`${settings.prefix}help | Stress Care Server Official Bot.`)
+    }, 10000) //10 Second timer
 })
 
 
@@ -42,8 +46,8 @@ fs.readdir(`./commands`, (err, files) => {
 
 
 
-// Client Events : message
-client.on(`message`, message => {
+// Client Events : messageCreate
+client.on(`messageCreate`, message => {
     if(message.author.bot || !message.guild) return;
 
     if(!message.content.startsWith(Prefix)) return;
@@ -76,7 +80,7 @@ client.on(`message`, message => {
         cmd.execute(client, message, args, need_ADMINISTRATOR, need_BAN_MEMBERS, need_KICK_MEMBERS)
     } catch(e) {
         console.log(e)
-        message.channel.send(`Error : \`${e}\``)
+        message.reply({content: `Error : \`${e}\``})
     }
 })
 
@@ -89,10 +93,13 @@ client.on(`guildMemberAdd`, member => {
         if(ch.id === settings.ch_id.joinlog) {
             const join_msg = new MessageEmbed()
                 .setTitle(`Join the Server`)
-                .setDescription(`User : ${member.user.tag} (**${member.user.id}**)`)
+                .setDescription(` `)
                 .setColor(settings.color.joinuser)
+                .setThumbnail(member.user.avatarURL())
+                .addField(`User Tag`, `${member.user.tag}`)
+                .addField(`User ID`, `${member.user.id}`)
 
-            ch.send(join_msg)
+            ch.send({embeds :[join_msg]})
         } else {
             return;
         }
@@ -106,10 +113,13 @@ client.on(`guildMemberRemove`, member => {
         if(ch.id === settings.ch_id.leftlog) {
             const left_msg = new MessageEmbed()
                 .setTitle(`Left the server`)
-                .setDescription(`User : ${member.user.tag} (**${member.user.id}**)`)
+                .setDescription(` `)
                 .setColor(settings.color.leftuser)
+                .setThumbnail(member.user.avatarURL())
+                .addField(`User Tag`, `${member.user.tag}`)
+                .addField(`User ID`, `${member.user.id}`)
 
-            ch.send(left_msg)
+            ch.send({embeds: [left_msg]})
         } else {
             return;
         }
