@@ -45,6 +45,7 @@ fs.readdir(`./commands`, (err, files) => {
 })
 
 
+//[User Data] : Anti Spam
 const UserMap = new Map();
 
 // Client Events : messageCreate
@@ -52,7 +53,7 @@ client.on(`messageCreate`, async message => {
     if(message.author.bot || !message.guild) return;
 
 
-    //Anti Spam
+    //[System] : Anti Spam
     const time = 360000
 
     if(UserMap.get(message.author.id)) {
@@ -61,7 +62,7 @@ client.on(`messageCreate`, async message => {
         let difference = message.createdTimestamp - lastMessage.createdTimestamp;
         let msgCount = UserData.msgCount;
 
-        if(difference > 5000) {
+        if(difference > settings.antispam.spamtime + `000`) {
             clearTimeout(timer);
             UserData.msgCount = 1;
             UserData.lastMessage = message;
@@ -74,7 +75,7 @@ client.on(`messageCreate`, async message => {
         } else {
             msgCount++;
 
-            if(msgCount > 5) {
+            if(msgCount > settings.antispam.msgcount) {
                 const antispam = new MessageEmbed()
                     .setTitle(`[Anti Spam] : Warning`)
                     .setDescription(`・短時間で大量のメッセージを検知しました。\n・receiving a large number of messages in a short time.`)
@@ -118,6 +119,7 @@ client.on(`messageCreate`, async message => {
 
     if(message.content.match(/discord.gg/)) {
         if(!message.member.permissions.has(`ADMINISTRATOR`)) {
+            if(message.channel.id === settings.invitelink.ok_ch) return;
             return message.reply({embeds: [invitelink_error]})
                 .then(message.delete())            
         } else {

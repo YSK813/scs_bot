@@ -1,0 +1,22 @@
+{
+    "prefix": "sc!",
+    "color": {
+        "ok": "#00ff95",
+        "no": "#ff0000",
+        "joinuser": "#32ff32",
+        "leftuser": "#ff3232"
+    },
+    "ch_id": {
+        "joinlog": "961894577533497374",
+        "leftlog": "961894577533497374"
+    },
+
+    "antispam": {
+        "spamtime": "5",
+        "msgcount": "5"
+    },
+
+    "invitelink": {
+        "ok_ch": "958708684953903144"
+    }
+}
