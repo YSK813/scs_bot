@@ -1,3 +1,6 @@
+# The support of this project has ended. If you have anything, please come to [this server](https://yskblog.work/yskserver).
+
+
 # SCS Bot (Stress Care Server Bot)
 
 ![Bot Icon](/picture/SCSbot_icon.png)
